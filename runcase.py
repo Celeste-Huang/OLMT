@@ -43,6 +43,8 @@ parser.add_option("--lon_bounds", dest="lon_bounds", default='-999,-999', \
                   help = 'longitude range for regional run')
 parser.add_option("--humhol", dest="humhol", default=False, \
                   help = 'Use hummock/hollow microtopography', action="store_true")
+parser.add_option("--marsh", dest="marsh", default=False, \
+                  help = 'Use marsh hydrology/elevation', action="store_true")
 parser.add_option("--mask", dest="mymask", default='', \
                   help = 'Mask file to use (regional only)')
 parser.add_option("--model", dest="mymodel", default='', \
@@ -602,7 +604,7 @@ if (isglobal == False):
             alignyear = int(row[8])
             if (options.diags):
                 timezone = int(row[9])
-            if (options.humhol):
+            if (options.humhol or options.marsh):
                 numxpts=2
             else:
                 numxpts=1
@@ -644,7 +646,7 @@ if (options.mod_parm_file != ''):
 else:
     os.system('nccopy -3 '+options.ccsm_input+'/lnd/clm2/paramdata/'+parm_file+' ' \
               +tmpdir+'/clm_params.nc')
-    if (options.humhol):
+    if (options.humhol or options.marsh):
       print('Adding hummock-hollow parameters (default for SPRUCE site)')
       print('humhol_ht = 0.15m')
       print('hum_frac  = 0.64')
@@ -1274,6 +1276,9 @@ else:
 if (options.humhol):
     print("Turning on HUM_HOL modification\n")
     os.system("./xmlchange -id CLM_CONFIG_OPTS --append --val '-cppdefs -DHUM_HOL'")
+if (options.marsh):
+    print("Turning on MARSH modification\n")
+    os.system("./xmlchange -id CLM_CONFIG_OPTS --append --val '-cppdefs -DMARSH'")
 if (options.harvmod):
     print('Turning on HARVMOD modification\n')
     os.system("./xmlchange -id CLM_CONFIG_OPTS --append --val '-cppdefs -DHARVMOD'")

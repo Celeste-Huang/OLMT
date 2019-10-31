@@ -43,6 +43,8 @@ parser.add_option("--hist_nhtfrq_trans", dest="hist_nhtfrq", default="-24", \
                   help = 'output file timestep (transient only)')
 parser.add_option("--humhol", dest="humhol", default=False, \
                   help = 'Use hummock/hollow microtopography', action="store_true")
+parser.add_option("--marsh", dest="marsh", default=False, \
+                  help = 'Use marsh hydrology/elevation', action="store_true")
 parser.add_option("--lai", dest="lai", default=-999, \
                   help = 'Set constant LAI (SP mode only)')
 parser.add_option("--machine", dest="machine", default = '', \
@@ -463,6 +465,8 @@ for row in AFdatareader:
             basecmd = basecmd+' --harvmod'
         if (options.humhol):
             basecmd = basecmd+' --humhol'
+        if (options.marsh):
+            basecmd = basecmd+' --marsh'
         if (float(options.lai) >= 0):
             basecmd = basecmd+' --lai '+str(options.lai)
         if (options.nopftdyn):
